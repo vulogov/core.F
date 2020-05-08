@@ -24,9 +24,9 @@ def nsRelease(ns):
     return RELEASE
 """
 
-name="corens"
+name="coref"
 version="0.0"
-release="0.0.8"
+release="0.0.1"
 author='Vladimir Ulogov'
 author_email='vladimir.ulogov@me.com'
 url='https://github.com/vulogov/core.ns'
@@ -40,7 +40,7 @@ def write_version(fname):
     f = open("{}/{}".format(root_dir, fname), 'w')
     f.write(VERSION_PY % (version, release, url, author, author_email, license))
 
-write_version("corens/version.py")
+write_version("coref/version.py")
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -67,4 +67,3 @@ setup(name=name,
     license=license,
     install_requires=load_requirements("requirements.txt"),
     packages=find_packages())
-
