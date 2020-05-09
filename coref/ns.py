@@ -10,21 +10,9 @@ from dpath.util import get as dpget
 from dpath.util import set as dpset
 from dpath.util import delete as dpdel
 from coref.monad import *
+from coref.internal import *
 from pymonad import curry
 
-def expandPath(x):
-    import os.path
-    p = os.path.normpath(x)
-    _p = p.split("/")
-    _p = [i for i in _p if i]
-    out = []
-    for e in reversed(range(len(_p))):
-        _d = "/"+"/".join(_p[:(e+1)])
-        out.append(_d)
-    return out
-
-def unique(x):
-    return list(set(x))
 
 def V(ns, path):
     try:

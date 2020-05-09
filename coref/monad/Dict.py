@@ -91,6 +91,6 @@ class Dict(dict, Monad, Monoid):
 		return self.mplus(other)
 
 	def __and__(self, function):
-        return Dict(**function(self.getValue()))
+		return Dict(**function(self.getValue()))
 
 Values = Dict

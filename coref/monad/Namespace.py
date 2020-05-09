@@ -34,5 +34,5 @@ class Namespace(Dict):
         	result[name] = self[key] * functorValue
         return Namespace(**result)
 
-	def __and__(self, function):
+    def __and__(self, function):
         return Namespace(**function(self.getValue()))
