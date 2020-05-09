@@ -4,6 +4,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from coref.monad import *
 
+def test_ns_1():
+    d = Namespace()
+    d += Namespace(answer=42)
+    assert d['answer'] == 42
 
 def test_dict_1():
     d = Dict()
@@ -23,6 +27,15 @@ def test_dict_3():
     d = Dict(answer=21)
     d = d.fmap(doubler)
     assert d['answer'] == 42
+
+def test_dict_4():
+    def doubler(x):
+        res = {}
+        for k in x:
+            res[k] = x[k]*2
+        return res
+    d = Dict(answer=21) | doubler | doubler
+    assert d['answer'] == 84
 
 def test_set_1():
     s = Set()
@@ -48,3 +61,43 @@ def test_set_4():
         return x*2
     s = Set(21) >> doubler
     assert 42 in s
+
+def test_set_4():
+    def doubler(x):
+        return x*2
+    s = Set(21) | doubler
+    assert 42 in s
+
+def test_value_1():
+    v = Value(42)
+    assert v.getValue() == 42
+
+def test_value_2():
+    v = Value(21) + Value(21)
+    assert v.getValue() == 42
+
+def test_value_3():
+    def doubler(x):
+        return x*2
+    v = Value(21) | doubler
+    assert v.getValue() == 42
+
+def test_v_1():
+    d = v(42)
+    assert d.getValue() == 42
+
+def test_v_2():
+    d = v([1,2,3])
+    assert len(d) == 3
+
+def test_v_3():
+    d = v(1,2,3)
+    assert len(d) == 3
+
+def test_v_4():
+    d = v(answer=42)
+    assert d["answer"] == 42
+
+def test_v_5():
+    d = v(set([1,2,3]))
+    assert len(d) == 3

@@ -5,42 +5,38 @@
 import time
 import uuid
 import os.path
-from pymonad import *
 from dpath.util import new as dpnew
 from dpath.util import get as dpget
 from dpath.util import set as dpset
 from dpath.util import delete as dpdel
+from coref.monad import *
+from pymonad import curry
+
+def expandPath(x):
+    import os.path
+    p = os.path.normpath(x)
+    _p = p.split("/")
+    _p = [i for i in _p if i]
+    out = []
+    for e in reversed(range(len(_p))):
+        _d = "/"+"/".join(_p[:(e+1)])
+        out.append(_d)
+    return out
+
+def unique(x):
+    print(x)
+    print(list(set(x)))
+    return list(set(x))
 
 def V(ns, path):
-    if path == "/":
-        return Just(ns)
     try:
         res = dpget(ns, path)
     except KeyError:
-        return Nothing
-    if isinstance(res, list):
-        return List(res)
-    return Just(res)
-
-def fMkDirData():
-    return {
-        '__dir__': True,
-        '__stamp__': time.time(),
-        '__id__': str(uuid.uuid4())
-    }
-
-def fMk(ns, path, data):
-    if path == "/":
-        return Nothing
-    if V(ns, path) != Nothing:
-        return Nothing
-    base = os.basename(path)
-    fMk(ns, base, fMkDirData())
-    return dpnew(ns, path, data)
+        return NONE
+    return v(res)
 
 
 def fNS(ns={}, **kw):
-    ns = ns
-    ns.update(fMkDirData())
-    ns.update(kw)
-    return curry(V)(ns)
+    ns = Namespace(**ns)
+    ns += Namespace(**kw)
+    return ns

@@ -56,6 +56,9 @@ class Set(set, Monad, Monoid):
 			result.add(subList)
 		return Set(*result)
 
+	def __or__(self, function):
+		return super(Set, self).__rshift__(function)
+
 	def __rmul__(self, function):
 		return self.fmap(function)
 

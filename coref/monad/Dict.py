@@ -67,6 +67,9 @@ class Dict(dict, Monad, Monoid):
 		"""
 		return Dict(**function(self))
 
+	def __or__(self, function):
+		return super(Dict, self).__rshift__(function)
+
 	def __rmul__(self, function):
 		return self.fmap(function)
 
@@ -77,8 +80,7 @@ class Dict(dict, Monad, Monoid):
 
 	def mplus(self, other):
 		"""
-		Combines two List monoid values into a single List monoid by concatenating the
-		two lists together.
+		Combines two Dict monoid values into a single Dict monoid 
 
 		"""
 		super(Dict, self).update(other)
@@ -87,3 +89,5 @@ class Dict(dict, Monad, Monoid):
 	def __add__(self, other):
 		""" Overrides Python's native list __add__ operator to call 'mplus'.  """
 		return self.mplus(other)
+
+Values = Dict
