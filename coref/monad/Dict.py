@@ -80,7 +80,7 @@ class Dict(dict, Monad, Monoid):
 
 	def mplus(self, other):
 		"""
-		Combines two Dict monoid values into a single Dict monoid 
+		Combines two Dict monoid values into a single Dict monoid
 
 		"""
 		super(Dict, self).update(other)
@@ -89,5 +89,8 @@ class Dict(dict, Monad, Monoid):
 	def __add__(self, other):
 		""" Overrides Python's native list __add__ operator to call 'mplus'.  """
 		return self.mplus(other)
+
+	def __and__(self, function):
+        return Dict(**function(self.getValue()))
 
 Values = Dict

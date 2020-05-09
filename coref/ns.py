@@ -24,8 +24,6 @@ def expandPath(x):
     return out
 
 def unique(x):
-    print(x)
-    print(list(set(x)))
     return list(set(x))
 
 def V(ns, path):
