@@ -1,3 +1,5 @@
+from .V import v
+from .NONE import NONE
 from pymonad.Monad import *
 from pymonad.Monoid import *
 
@@ -8,8 +10,10 @@ class Dict(dict, Monad, Monoid):
 	indexing,  etc.
 	"""
 
-	def __init__(self, **values):
+	def __init__(self, data=None, **values):
 		""" Takes any number of values (including none) and puts them in the Dict monad. """
+		if data is not None and data is not NONE and isinstance(data, dict):
+			super(Dict, self).__init__(**data)
 		super(Dict, self).__init__(values)
 
 	def __eq__(self, other):
@@ -22,9 +26,16 @@ class Dict(dict, Monad, Monoid):
 			return True
 		return super(Dict, self).__ne__(other)
 
-	#def __getitem__(self, key):
-	#	print(key, self)
-	#	return Dict(**super(Dict, self).__getitem__(key))
+	def __getitem__(self, key):
+		return super(Dict, self).__getitem__(key)
+
+	def v(self, key):
+		return v(super(Dict, self).__getitem__(key))
+
+	def __setitem__(self, key, value):
+		if isinstance(value, Monad) is True:
+			return super(Dict, self).__setitem__(key, value.getValue())
+		return super(Dict, self).__setitem__(key, value)
 
 	def __str__(self):
 		display = "Dict {  "

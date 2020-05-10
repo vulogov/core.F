@@ -1,8 +1,10 @@
+import re
 from .Dict import Dict
+from .L import L
 
 class Namespace(Dict):
     def ls(self):
-        return List(*[item for item in list(self.getValue().keys()) if re.match(r"^(?!\_\_.*)", item)])
+        return L(*[item for item in list(self.getValue().keys()) if re.match(r"^(?!\_\_.*)", item)])
 
     def __str__(self):
         x = self.getValue()

@@ -69,18 +69,30 @@ def test_set_4():
     assert 42 in s
 
 def test_value_1():
-    v = Value(42)
-    assert v.getValue() == 42
+    val = Value(42)
+    assert val.getValue() == 42
 
 def test_value_2():
-    v = Value(21) + Value(21)
-    assert v.getValue() == 42
+    val = Value(21) + Value(21)
+    assert val.getValue() == 42
 
 def test_value_3():
     def doubler(x):
         return x*2
-    v = Value(21) | doubler
-    assert v.getValue() == 42
+    val = Value(21) | doubler
+    assert val.getValue() == 42
+
+def test_value_4():
+    val = Value(42)
+    assert val == v(42)
+
+def test_value_5():
+    val = Value(42) == 42
+    assert val == TRUE
+
+def test_value_6():
+    val = Value(42) == 41
+    assert val == FALSE
 
 def test_v_1():
     d = v(42)
@@ -101,3 +113,6 @@ def test_v_4():
 def test_v_5():
     d = v(set([1,2,3]))
     assert len(d) == 3
+
+def test_v_5():
+    assert v(True) == TRUE

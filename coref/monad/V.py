@@ -1,10 +1,10 @@
-from .Value import Value
-from .Dict import Dict
-from .Set import Set
-from .L import L
-from pymonad.Monad import *
 
 def v(*values, **kw):
+    from .Value import Value
+    from .Dict import Dict
+    from .Set import Set
+    from .L import L
+
     if not values and not kw:
         return Nothing
     if values and len(values) == 1:
