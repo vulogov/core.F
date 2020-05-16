@@ -1,7 +1,10 @@
+from .IterableStr import IterableStr
+from .OrOp import OrOp
 from pymonad.Monad import *
 from pymonad.Monoid import *
 
-class Set(set, Monad, Monoid):
+
+class Set(set, Monad, Monoid, IterableStr, OrOp):
 	"""
 	Represents a non-deterministic calculation or a calculation with more than one possible result.
 	Based on Python's built-in 'set' type, 'Set' supports most basic set operations

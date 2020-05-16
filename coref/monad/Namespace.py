@@ -1,8 +1,9 @@
 import re
 from .Dict import Dict
 from .L import L
+from .OrOp import OrOp
 
-class Namespace(Dict):
+class Namespace(Dict, OrOp):
     def ls(self):
         return L(*[item for item in list(self.getValue().keys()) if re.match(r"^(?!\_\_.*)", item)])
 
@@ -13,9 +14,6 @@ class Namespace(Dict):
     def mplus(self, other):
         super(Namespace, self).update(other)
         return Namespace(**self)
-
-    def __or__(self, function):
-        return super(Namespace, self).__rshift__(function)
 
     def bind(self, function):
         return Namespace(**function(self))

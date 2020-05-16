@@ -1,15 +1,15 @@
+from .OrOp import OrOp
 from pymonad.Maybe import *
 from pymonad.Monoid import *
 
-class Value(Just):
+class Value(Just, OrOp):
     def __str__(self):
-        return str(self.getValue())
+        return str(super(Value, self).getValue())
+    def __repr__(self):
+        return str(super(Value, self).getValue())
 
     def bind(self, function):
         return Value(function(self.getValue()))
-
-    def __or__(self, function):
-        return super(Value, self).__rshift__(function)
 
     def __and__(self, function):
         return super(Value, self).bind(function)

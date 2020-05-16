@@ -4,6 +4,7 @@ def v(*values, **kw):
     from .Dict import Dict
     from .Set import Set
     from .L import L
+    from .NONE import NONE
 
     if not values and not kw:
         return Nothing
@@ -14,10 +15,12 @@ def v(*values, **kw):
             return Dict(**values[0])
         elif isinstance(values[0], set) is True:
             return Set(*values[0])
+        elif values[0] is None:
+            return NONE
         else:
             return Value(values[0])
     if values and len(values) > 1:
         return L(*values)
     if kw:
         return Dict(**kw)
-    return Nothing
+    return NONE

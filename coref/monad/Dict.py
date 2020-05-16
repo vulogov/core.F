@@ -1,9 +1,10 @@
 from .V import v
 from .NONE import NONE
+from .OrOp import OrOp
 from pymonad.Monad import *
 from pymonad.Monoid import *
 
-class Dict(dict, Monad, Monoid):
+class Dict(dict, Monad, Monoid, OrOp):
 	"""
 	Represents a non-deterministic calculation or a calculation with more than one possible result.
 	Based on Python's built-in 'dict' type, 'Dict' supports most basic dict operations such as
@@ -77,9 +78,6 @@ class Dict(dict, Monad, Monoid):
 		'function' should accept a single non-Dict argument and return a new Dict.
 		"""
 		return Dict(**function(self))
-
-	def __or__(self, function):
-		return super(Dict, self).__rshift__(function)
 
 	def __rmul__(self, function):
 		return self.fmap(function)
