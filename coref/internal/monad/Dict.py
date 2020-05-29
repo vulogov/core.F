@@ -31,7 +31,7 @@ class Dict(Monad, Monoid, Applicative, Functor, Sized, Iterable):
     def append(self, other: 'Dict') -> 'Dict':
         if self.null():
             return other
-        _d = Dict()
+        _d = self.empty()
         _d._value.update(self.value)
         _d._value.update(other.value)
         return (_d)
