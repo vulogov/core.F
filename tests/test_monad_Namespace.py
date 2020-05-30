@@ -6,7 +6,10 @@ tests_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 
 from oslash import *
 from coref.internal.monad import *
+from coref.internal.util import partial
 
+def Doubler(ns, path):
+    return ns.V(path).value * 2
 
 def test_monad_Namespace_1():
     d = Namespace()
@@ -19,7 +22,7 @@ def test_monad_Namespace_2():
 
 def test_monad_Namespace_3():
     d = Namespace()
-    assert d.V('/answer') == NONE
+    assert d.V('/answer') == Nothing()
 
 def test_monad_Namespace_4():
     d = Namespace()
@@ -40,3 +43,40 @@ def test_monad_Namespace_7():
     d.V('/home/answer', Just(42))
     home = d.cd('/home')
     assert home.V("/answer") == Just(42)
+
+def test_monad_Namespace_8():
+    d = Namespace()
+    home = d.mkdir('/home')
+    home = home + Values(answer = 42)
+    home.C()
+    assert d.V("/home/answer") == Just(42)
+
+def test_monad_Namespace_9():
+    d = Namespace()
+    d.V("/bin/doubler", Doubler)
+    d.V("/home/answer", Just(21))
+    assert d.V("/bin/doubler") == Just(Doubler)
+
+def test_monad_Namespace_10():
+    d = Namespace()
+    d.V("/bin/doubler", Doubler)
+    d.V("/home/answer", Just(21))
+    f = d.V("/bin/doubler").value
+    assert f(d, "/home/answer") == 42
+
+def test_monad_Namespace_11():
+    d = Namespace()
+    d.V("/bin/doubler", partial(Doubler, d))
+    d.V("/home/answer", Just(21))
+    f = d.V("/bin/doubler").value
+    assert f("/home/answer") == 42
+
+def test_monad_Namespace_12():
+    d = Namespace()
+    assert d.f("/bin/doubler")() == Nothing()
+
+def test_monad_Namespace_13():
+    d = Namespace()
+    d.V("/bin/doubler", partial(Doubler, d))
+    d.V("/home/answer", Just(21))
+    assert d.f("doubler")("/home/answer") == 42

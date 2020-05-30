@@ -1,5 +1,4 @@
 from copy import deepcopy
-from functools import partial
 from typing import Generic, Callable, Iterator, TypeVar, Iterable, Sized, Any
 
 from oslash.abc import Applicative
