@@ -1,6 +1,7 @@
 from copy import deepcopy
 from typing import Generic, Callable, Iterator, TypeVar, Iterable, Sized, Any
 
+from .L import L
 from oslash.abc import Applicative
 from oslash.abc import Functor
 from oslash.abc import Monoid
@@ -100,6 +101,10 @@ class Dict(Monad, Monoid, Applicative, Functor, Sized, Iterable):
         if isinstance(key, Monad) is True:
             _key = key.value
         return self._get_value().__delitem__(_key)
+
+    def keys(self):
+        return L(list(self._value.keys()))
+
     def __str__(self):
         return str(self._get_value())
     def __repr__(self):

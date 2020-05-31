@@ -4,6 +4,18 @@ import uuid
 from oslash import Monad
 from oslash.maybe import Just, Nothing
 
+def dpnew(ns, path, value):
+    return ns.V(path, value)
+
+def dpset(ns, path, value):
+    return ns.V(path, value)
+
+def dpget(ns, path):
+    res = ns.V(path)
+    if res == Nothing():
+        raise KeyError(path)
+    return res
+
 class DP:
     def __init__(self, *derive, **kw):
         self._value = {}

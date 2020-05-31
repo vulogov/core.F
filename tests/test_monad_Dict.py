@@ -39,3 +39,7 @@ def test_monad_Dict_6():
 def test_monad_Dict_7():
     d = Dict() + Values(answer=42)
     assert d["answer"] == 42
+
+def test_monad_Dict_8():
+    d = Dict(answer=42)
+    assert d.keys().head() == "answer"

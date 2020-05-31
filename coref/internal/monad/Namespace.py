@@ -100,6 +100,9 @@ class Namespace(Dict):
     def V(self, path: str, value: Monad=NONE) -> Any:
         import os.path
 
+        if path[0] != "/":
+            path = f"/home/{path}"
+
         if value is NONE or value is None or value is Nothing():
             return self._value.get(path)
         else:
