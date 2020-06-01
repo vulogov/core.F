@@ -15,3 +15,21 @@ def nsGet(ns, path, default=NONE):
             return default
         return Just(default)
     return v
+
+def nsLn(ns, _from, _to):
+    v = ns.V(_from)
+    if nsNothing(v):
+        return v
+    return ns.V(_to, v)
+
+def nsDir(ns, path):
+    return ns.cd(path)
+
+def nsLs(ns, path):
+    return ns.ls(path)
+
+def nsMkdir(ns, path):
+    return ns.mkdir(path)
+
+def nsMemory(ns):
+    return sys.getsizeof(ns)

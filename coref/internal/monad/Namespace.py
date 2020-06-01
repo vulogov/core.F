@@ -97,6 +97,8 @@ class Namespace(Dict):
             _res.append(self.cd(i))
         return tuple(_res)
     def cd(self, path: str) -> 'Namespace':
+        if self.stor.here(f"{path}/afile") is True:
+            return NONE
         ns = self._value
         try:
             res =  Namespace(self._value.get(path))

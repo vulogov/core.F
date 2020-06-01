@@ -10,3 +10,10 @@ def test_ns_1():
     ns = Namespace()
     nsSet(ns, "/home/answer", 42)
     assert nsGet(ns, "/home/answer") == Just(42)
+
+def test_ns_2():
+    ns = Namespace()
+    home = nsMkdir(ns, "/home")
+    nsSet(home, "/answer", Just(42))
+    home.C()
+    assert nsGet(ns, "/home/answer") == Just(42)
