@@ -38,3 +38,10 @@ def test_monad_DP_6():
     d = DP()
     d.set("/bin/add", Just(partial(a, 2)))
     assert d.get("/bin/add").value(2) == 4
+
+def test_monad_DP_7():
+    d1, d2 = DP(), DP()
+    d1.set("/home/my/answer", 42)
+    d2.set("/home/my/pi", 3.14)
+    d1.update(d2)
+    assert d1.get("/home/my/pi") == Just(3.14)

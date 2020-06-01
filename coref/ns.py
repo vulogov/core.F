@@ -1,6 +1,20 @@
 import sys
 from coref import *
 
+def nsNS(*cfg, **kw):
+    ns = Namespace(kw)
+    for c in cfg:
+        if isinstance(c, dict) is True:
+            ns.update(c)
+        elif isinstance(c, Dict) is True:
+            ns += c
+        elif callable(c) is True:
+            c(ns)
+        else:
+            pass
+    return ns
+
+
 def nsSet(ns, key, val):
     if nsGet(ns, "/config/var.redefine", True) == TRUE:
         return ns.V(key, val)

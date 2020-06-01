@@ -3,6 +3,7 @@ import time
 import uuid
 from oslash import Monad
 from oslash.maybe import Just, Nothing
+from coref.internal.util import *
 
 def dpnew(ns, path, value):
     return ns.V(path, value)
@@ -39,6 +40,17 @@ class DP:
 
     def keys(self):
         return self._value.keys()
+
+    def update(self, x):
+        if isinstance(x, dict) is True:
+            self._value = mergedicts(self._value, x)
+            return self
+        if hasattr(x, 'isNamespace') is True:
+            self._value = mergedicts(self._value, x.raw().raw())
+            return self
+        if isinstance(x, DP) is True:
+            self._value = mergedicts(self._value, x.raw())
+        return self
 
     def mkdir(self, path):
         _p = os.path.abspath(path).split("/")

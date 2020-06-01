@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 tests_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 
 from oslash import *
+from coref import *
 from coref.internal.monad import *
 from coref.internal.util import partial
 
@@ -19,6 +20,13 @@ def test_monad_Namespace_2():
     d = Namespace()
     d.V('/answer', Just(42))
     assert d.V('/answer') == Just(42)
+
+def test_monad_Namespace_2_1():
+    d1, d2 = Namespace(), Namespace()
+    d1.V('/home/answer', Just(42))
+    d2.V('/home/pi', Just(3.14))
+    d1.update(d2)
+    assert d1.V('/home/pi') == Just(3.14)
 
 def test_monad_Namespace_3():
     d = Namespace()
@@ -49,6 +57,12 @@ def test_monad_Namespace_8():
     home = d.mkdir('/home')
     home = home + Values(answer = 42)
     home.C()
+    assert d.V("/home/answer") == Just(42)
+
+def test_monad_Namespace_8_1():
+    d = Namespace()
+    home = d.mkdir('/home')
+    C(home + Values(answer = 42))
     assert d.V("/home/answer") == Just(42)
 
 def test_monad_Namespace_9():

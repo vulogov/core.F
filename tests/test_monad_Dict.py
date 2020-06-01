@@ -43,3 +43,13 @@ def test_monad_Dict_7():
 def test_monad_Dict_8():
     d = Dict(answer=42)
     assert d.keys().head() == "answer"
+
+def test_monad_Dict_9():
+    d = Dict()
+    d.update(answer=42)
+    assert d["answer"] == 42
+
+def test_monad_Dict_10():
+    d = Dict()
+    d.update({'answer':42})
+    assert d["answer"] == 42

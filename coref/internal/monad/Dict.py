@@ -1,6 +1,7 @@
 from copy import deepcopy
 from typing import Generic, Callable, Iterator, TypeVar, Iterable, Sized, Any
 
+from coref.internal.util import *
 from .L import L
 from oslash.abc import Applicative
 from oslash.abc import Functor
@@ -35,6 +36,19 @@ class Dict(Monad, Monoid, Applicative, Functor, Sized, Iterable):
         _d._value.update(self.value)
         _d._value.update(other.value)
         return (_d)
+
+    def update(self, other: Any=None, **kw) -> 'Dict':
+        self._value.update(kw)
+        if isinstance(other, dict) is True:
+            self._value.update(other)
+        elif isinstance(other, Dict) is True:
+            self._value.update(other.value)
+        elif isIterable(other) is True:
+            for x in other:
+                self.update(x)
+        else:
+            return self
+        return self
 
     def __len__(self):
         return len(self.value.keys())

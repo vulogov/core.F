@@ -3,8 +3,8 @@ import uuid
 import re
 from fnmatch import fnmatch
 from coref.internal.dp import DP
-from coref.internal.path import expandPath
-from coref.internal.util import unique, partial
+from coref.internal.path import *
+from coref.internal.util import *
 from coref.internal.v import Vstor
 from typing import Generic, Callable, Iterator, TypeVar, Iterable, Sized, Any
 from coref.internal.monad.internal import NONE
@@ -14,6 +14,7 @@ from oslash import Monad, Just, Nothing
 
 class Namespace(Dict):
     def __init__(self, derive: Callable[[Callable], Any]=None, **kw) -> None:
+        self.isNamespace = True
         if derive is None:
             self._value = DP()
         elif isinstance(derive, dict) is True:
@@ -40,6 +41,21 @@ class Namespace(Dict):
             self._value.raw().update(_new)
         self.stor = Vstor()
         self.V("/sys/vstor", self.stor)
+
+    def update(self, *cfg, **kw):
+        for k in kw:
+            if k[0] != "/":
+                _k = f"/home/{k}"
+            else:
+                _k = k
+            self._value.set(_k, kw[k])
+        for c in cfg:
+            if callable(c) is True:
+                c(self)
+                continue
+            self._value.update(c)
+        return self
+
 
     def _derive(self, _d, *attrs):
         for a in attrs:
@@ -189,3 +205,8 @@ class Namespace(Dict):
         res = L(_out)
         res.name = path
         return L(_out)
+
+def C(*ns):
+    for n in ns:
+        if isinstance(n, Namespace) is True:
+            n.C()
