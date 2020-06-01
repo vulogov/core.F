@@ -80,3 +80,15 @@ def test_monad_Namespace_13():
     d.V("/bin/doubler", partial(Doubler, d))
     d.V("/home/answer", Just(21))
     assert d.f("doubler")("/home/answer") == 42
+
+def test_monad_Namespace_14():
+    d = Namespace()
+    d.V('/home/answer', Just(42))
+    dir = d.ls("/home", type=(int))
+    assert dir.head() == Just(42)
+
+def test_monad_Namespace_15():
+    d = Namespace()
+    d.stor.mount('home', ':mem:', ['/home/*'])
+    d.V('/home/answer', Just(42))
+    assert d.V("/home/answer") == Just(42)

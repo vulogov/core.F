@@ -1,11 +1,15 @@
 import time
 import uuid
+import re
+from fnmatch import fnmatch
 from coref.internal.dp import DP
 from coref.internal.path import expandPath
 from coref.internal.util import unique, partial
+from coref.internal.v import Vstor
 from typing import Generic, Callable, Iterator, TypeVar, Iterable, Sized, Any
 from coref.internal.monad.internal import NONE
 from .Dict import Dict
+from .L import L
 from oslash import Monad, Just, Nothing
 
 class Namespace(Dict):
@@ -34,20 +38,30 @@ class Namespace(Dict):
                 '__id__': str(uuid.uuid4())
             }
             self._value.raw().update(_new)
+        self.stor = Vstor()
+        self.V("/sys/vstor", self.stor)
+
+    def _derive(self, _d, *attrs):
+        for a in attrs:
+            if hasattr(self, a) is True:
+                setattr(_d, a, getattr(self, a))
+
+    def _clone(self, _orig, _dst, *attrs):
+        for a in attrs:
+            if hasattr(_orig, a) is True and hasattr(_dst, a) is False:
+                setattr(_dst, a, getattr(_orig, a))
 
     def append(self, other: 'Dict') -> 'Dict':
         if self.null():
             return other
         _d = self.empty()
-        if hasattr(self, "parent") is True:
-            _d.parent = self.parent
+        self._derive(_d, "parent", "stor")
         _d.raw().raw().update(self.value.raw())
         if isinstance(other.value, DP) is True:
             _d.raw().raw().update(other.value.raw())
         else:
             _d.raw().raw().update(other.value)
-        if hasattr(other, "parent") is True and hasattr(_d, "parent") is False:
-            _d.parent = other.parent
+        self._clone(other, _d, "parent", "stor")
         return (_d)
 
     def raw(self):
@@ -74,6 +88,7 @@ class Namespace(Dict):
             _nns.parent = self.parent
         else:
             _nns.parent = self
+        self._clone(self, _nns, "stor")
         return _nns
 
     def Cd(self, *path) -> tuple:
@@ -91,6 +106,7 @@ class Namespace(Dict):
             res.parent = self.parent
         else:
             res.parent = self
+        self._clone(self, res, "stor")
         return res
 
     def C(self):
@@ -104,13 +120,22 @@ class Namespace(Dict):
             path = f"/home/{path}"
 
         if value is NONE or value is None or value is Nothing():
+            if self.stor.here(path) is True:
+                res = self.stor.get(path)
+                if res is None:
+                    return NONE
+                else:
+                    return Just(res)
             return self._value.get(path)
         else:
             if isinstance(value, Monad) is True:
                 data = value.value
             else:
                 data = value
-            self._value.set(path, value)
+            if self.stor.here(path) is True:
+                self.stor.set(path, data)
+            else:
+                self._value.set(path, value)
             return value
         return NONE
 
@@ -132,3 +157,33 @@ class Namespace(Dict):
                         return partial(fun.value, *args, **kw)
                     return fun.value
         return _fun
+
+    def ls(self, path: str, patt: str="*", **kw) -> 'L':
+        _out = []
+        v = self._value.get(path, None)
+        if v is None or v is NONE:
+            return NONE
+        if isinstance(v, Monad):
+            v = v.value
+        if isinstance(v, dict) is True and v.get('__dir__', False) is True:
+            for k in v:
+                if re.match(r"\_\_(.*)", k) is not None:
+                    continue
+                if fnmatch(k, patt) is not True:
+                    continue
+                _v = v[k]
+                if isinstance(_v, dict) is True and _v.get('__dir__', False) is True and kw.get('dir', True) is True:
+                    _nns = Namespace(_v)
+                    self._clone(self, _nns, "stor")
+                    _out.append(_nns)
+                else:
+                    if kw.get("type", None) is not None and isinstance(kw.get("type"), tuple) is True:
+                        if isinstance(_v, kw.get("type")) is True:
+                            _out.append(Just(_v))
+                    else:
+                        _out.append(Just(_v))
+        else:
+            return NONE
+        res = L(_out)
+        res.name = path
+        return L(_out)
