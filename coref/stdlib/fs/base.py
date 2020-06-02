@@ -2,7 +2,10 @@ from coref.mod import nsValues, nsList
 
 _set = nsValues(
     {
-        '/etc/answer': 42
+        '/etc/answer': 42,
+        '/config/var.redefine': True,
+        '/etc/daemonize': False,
+        '/etc/flags/truename': False,
     }
 )
 
@@ -17,5 +20,6 @@ _mkdir = [
     '/usr/local',
     '/usr/local/bin',
     '/proc',
-    '/dev'
+    '/dev',
+    '/templates'
 ]
