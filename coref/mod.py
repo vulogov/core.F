@@ -53,7 +53,7 @@ def _nsImportAttribute(ns, _module, attr):
     return NONE
 
 def _nsImportModule(ns, _module):
-    _attrs = ['_lib', '_mkdir', '_ln', '_init']
+    _attrs = ['_lib', '_mkdir', '_ln', '_init', '_set', '_ctx', '_ns']
     _mod = Dict()
     for a in _attrs:
         _mod[a] = _nsImportAttribute(ns, _module, a)
