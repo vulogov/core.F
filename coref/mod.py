@@ -1,7 +1,9 @@
 import os.path
 import pkgutil
 import importlib
-from coref import *
+from oslash import Monad
+from coref.internal.monad import *
+from coref.internal.util import partial
 
 def nsList(*elem) -> 'L':
     return L(list(elem))
@@ -24,12 +26,12 @@ def install_and_import(package):
     finally:
         globals()[package] = importlib.import_module(package)
 
-def nsImport(ns, m=[], *_mods):
+def nsImport(ns, m, *_mods):
     if type(m) == list and len(m) > 0:
         for _m in m:
             ns = _nsImport(ns, _m)
     elif type(m) == str:
-        return nsImport(ns, m)
+        return _nsImport(ns, m)
     else:
         for _m in _mods:
             ns = _nsImport(ns, _mod)
@@ -53,14 +55,31 @@ def _nsImportAttribute(ns, _module, attr):
     return NONE
 
 def _nsImportModule(ns, _module):
-    _attrs = ['_lib', '_mkdir', '_ln', '_init', '_set', '_ctx', '_ns']
+    _attrs = ['_lib', '_mkdir', '_ln', '_init', '_set', '_ctx', '_ns', '_tpl']
     _mod = Dict()
     for a in _attrs:
         _mod[a] = _nsImportAttribute(ns, _module, a)
     return _mod
 
+def _nsImportSet(ns, d):
+    if isNothing(d) is True:
+        return
+    for k,v in d:
+        ns.V(k, v)
+
+def _nsImportMkdir(ns, d):
+    if isNothing(d) is True:
+        return
+    def _nsMkdir(ns, x):
+        ns.mkdir(x)
+    mkdir = partial(_nsMkdir, ns)
+    d | mkdir
+
 def _nsImport(ns, module):
     for loader, module_name, is_pkg in pkgutil.walk_packages(importlib.import_module(module).__path__):
         _module = loader.find_module(module_name).load_module(module_name)
         _mod = _nsImportModule(ns, _module)
+        print(_mod)
+        _nsImportMkdir(ns, _mod["_mkdir"])
+        _nsImportSet(ns, _mod["_set"])
     return ns

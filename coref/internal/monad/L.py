@@ -2,6 +2,7 @@ from copy import deepcopy
 from typing import Generic, Callable, Iterator, TypeVar, Iterable, Sized, Any
 
 from coref.internal.util import partial
+from coref.internal.monad.internal import isNothing
 from oslash.abc import Applicative
 from oslash.abc import Functor
 from oslash.abc import Monoid
@@ -112,6 +113,8 @@ class L(Monad, Monoid, Applicative, Functor, Sized, Iterable):
         return "L(%s) "%self.name+str(self)
 
     def __eq__(self, other) -> bool:
+        if isNothing(other) is True:
+            return False
         if self.null() or other.null():
             return True if self.null() and other.null() else False
         return self.head() == other.head() and self.tail() == other.tail()

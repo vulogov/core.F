@@ -123,3 +123,5 @@ class Dict(Monad, Monoid, Applicative, Functor, Sized, Iterable):
         return str(self._get_value())
     def __repr__(self):
         return repr(self._get_value())
+
+Values = Dict
