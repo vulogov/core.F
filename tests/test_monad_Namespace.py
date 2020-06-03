@@ -106,3 +106,45 @@ def test_monad_Namespace_15():
     d.stor.mount('home', ':mem:', ['/home/*'])
     d.V('/home/answer', Just(42))
     assert d.V("/home/answer") == Just(42)
+
+def test_monad_Namespace_16():
+    d = Namespace()
+    d.V('/home/values', [])
+    d.V('/home/values').value.append(42)
+    assert d.V('/home/values').value[0] == 42
+
+def test_monad_Namespace_17():
+    def _divide(ns, x,y):
+        return x/y
+    d = Namespace()
+    nsImport(d, 'coref.stdlib')
+    d.V("/bin/divide", partial(_divide, d))
+    assert d.F("/bin/divide", 4, 2) == Right(2)
+
+def test_monad_Namespace_18():
+    def _divide(ns, x,y):
+        return x/y
+    ns = Namespace()
+    nsImport(ns, 'coref.stdlib')
+    ns.V("/bin/divide", partial(_divide, ns))
+    v = ns.F("/bin/divide", 4, 0)
+    assert  isinstance(v, Left) == True
+
+def test_monad_Namespace_19():
+    def _divide(ns, x,y):
+        return x/y
+    ns = Namespace()
+    nsImport(ns, 'coref.stdlib')
+    ns.V("/bin/divide", partial(_divide, ns))
+    v = ns.F("/bin/divide", 4, 0)
+    assert len(ns.V('/sys/traceback/tb').value) == 1
+
+def test_monad_Namespace_20():
+    def _divide(ns, x,y):
+        return x/y
+    ns = Namespace()
+    nsImport(ns, 'coref.stdlib')
+    ns.V("/bin/divide", partial(_divide, ns))
+    v = ns.F("/bin/divide", 4, 2)
+    fv = ns.V('/sys/traceback/ftrace').value.pop()
+    assert fv.fun == '/bin/divide'

@@ -1,4 +1,4 @@
-from .Dict import Dict
+from .Dict import Dict, Values
 from .Namespace import Namespace, C
 from .Tpl import Tpl
 from .L import L

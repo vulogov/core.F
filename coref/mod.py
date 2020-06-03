@@ -75,11 +75,23 @@ def _nsImportMkdir(ns, d):
     mkdir = partial(_nsMkdir, ns)
     d | mkdir
 
+def _nsImportTpl(ns, d):
+    if isNothing(d) is True:
+        return
+
+def _nsImportLib(ns, d):
+    if isNothing(d) is True:
+        return
+    for k,v in d:
+        ns.V(k, partial(v, ns))
+
+
 def _nsImport(ns, module):
     for loader, module_name, is_pkg in pkgutil.walk_packages(importlib.import_module(module).__path__):
         _module = loader.find_module(module_name).load_module(module_name)
         _mod = _nsImportModule(ns, _module)
-        print(_mod)
         _nsImportMkdir(ns, _mod["_mkdir"])
         _nsImportSet(ns, _mod["_set"])
+        _nsImportLib(ns, _mod["_lib"])
+        _nsImportLib(ns, _mod["_tpl"])
     return ns

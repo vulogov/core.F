@@ -1,16 +1,18 @@
 import time
 import uuid
 import re
+import sys
 from fnmatch import fnmatch
 from coref.internal.dp import DP
 from coref.internal.path import *
 from coref.internal.util import *
 from coref.internal.v import Vstor
 from typing import Generic, Callable, Iterator, TypeVar, Iterable, Sized, Any
-from coref.internal.monad.internal import NONE
+from coref.internal.monad.internal import NONE, isNothing
 from .Dict import Dict
 from .L import L
 from oslash import Monad, Just, Nothing
+from oslash import Left, Right
 
 class Namespace(Dict):
     def __init__(self, derive: Callable[[Callable], Any]=None, **kw) -> None:
@@ -176,6 +178,34 @@ class Namespace(Dict):
                     return fun.value
         return _fun
 
+    def F(self, path, *args, **kw):
+        _fun = self.f(path)
+        try:
+            _start = time.perf_counter()
+            res = _fun(*args, **kw)
+            _end = time.perf_counter()
+            ftrace = self.V('/sys/traceback/ftrace')
+            if isNothing(ftrace) is not None:
+                ft = self.V('/config/ftrace').value
+                _rec = ft(stamp=time.time(), fun=path, time=_end-_start, args=args, kw=kw)
+                ftrace.value.append(_rec)
+            return Right(res)
+        except:
+            _t, _val, _tb = sys.exc_info()
+            exc = self.V('/config/exception').value
+            if isNothing(exc) is not True:
+                res = exc(type=_t, value=_val, traceback=_tb)
+            else:
+                res = {}
+                res['type'] = _t
+                res['value'] = _val
+                res['traceback'] = _tb
+            tb = self.V('/sys/traceback/tb')
+            if isNothing(tb) is not True:
+                tb.value.append(res)
+                self.V('/sys/traceback/exists', True)
+            return Left(res)
+
     def ls(self, path: str, patt: str="*", **kw) -> 'L':
         _out = []
         v = self._value.get(path, None)
@@ -210,3 +240,9 @@ def C(*ns):
     for n in ns:
         if isinstance(n, Namespace) is True:
             n.C()
+
+def f(ns, path, *args, **kw):
+    return ns.f(path, *args, **kw)
+
+def F(ns, path, *args, **kw):
+    return ns.F(path, *args, **kw)
