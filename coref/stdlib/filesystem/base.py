@@ -8,6 +8,7 @@ _set = nsValues(
         '/config/var.redefine': True,
         '/etc/daemonize': False,
         '/etc/flags/truename': False,
+        '/sys/hylang.enabled': False
     }
 )
 

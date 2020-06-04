@@ -258,3 +258,6 @@ def f(ns, path, *args, **kw):
 
 def F(ns, path, *args, **kw):
     return ns.F(path, *args, **kw)
+
+def V(ns, path, value=NONE):
+    return ns.V(path, value)

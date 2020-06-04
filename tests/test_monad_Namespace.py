@@ -148,3 +148,13 @@ def test_monad_Namespace_20():
     v = ns.F("/bin/divide", 4, 2)
     fv = ns.V('/sys/traceback/ftrace').value.pop()
     assert fv.fun == '/bin/divide'
+
+def test_monad_Namespace_21():
+    ns, f, F = NS()
+    F("V", "/home/answer", 42)
+    assert isinstance(F("V", "/home/answer"), Right)
+
+def test_monad_Namespace_21():
+    ns, f, F = NS()
+    F("V", "/home/answer", 42)
+    assert F("V", "/home/answer").value == Just(42)
