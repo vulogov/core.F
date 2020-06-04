@@ -106,6 +106,12 @@ class L(Monad, Monoid, Applicative, Functor, Sized, Iterable):
             _new = _new.end(e)
         return _new
 
+    def sort(self):
+        return L(sorted(self))
+
+    def reverse(self):
+        return L(list(reversed(self.value)))
+
     def __str__(self) -> str:
         return "[%s]" % ", ".join([str(x) for x in self])
 

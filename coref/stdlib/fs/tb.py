@@ -1,6 +1,6 @@
 import os
 from collections import namedtuple
-from numpy_ringbuffer import RingBuffer
+from coref.internal.rb import RingBuffer
 from coref.mod import nsValues, nsList
 
 _EXCEPTION = namedtuple('Exception', ['type', 'value', 'traceback'])

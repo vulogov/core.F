@@ -55,7 +55,7 @@ def _nsImportAttribute(ns, _module, attr):
     return NONE
 
 def _nsImportModule(ns, _module):
-    _attrs = ['_lib', '_mkdir', '_ln', '_init', '_set', '_ctx', '_ns', '_tpl']
+    _attrs = ['_lib', '_mkdir', '_init', '_set', '_ctx', '_tpl']
     _mod = Dict()
     for a in _attrs:
         _mod[a] = _nsImportAttribute(ns, _module, a)
@@ -78,12 +78,42 @@ def _nsImportMkdir(ns, d):
 def _nsImportTpl(ns, d):
     if isNothing(d) is True:
         return
+    for k,v in d:
+        k = f"/templates/{k}"
+        ns.V(k, v)
+
 
 def _nsImportLib(ns, d):
     if isNothing(d) is True:
         return
     for k,v in d:
         ns.V(k, partial(v, ns))
+
+def _nsImportInit(ns, d):
+    if isNothing(d) is True:
+        return
+    if isinstance(d, Dict) is True:
+        d = d.value
+    for k in d:
+        if isinstance(d[k], dict) is not True:
+            continue
+        for k1 in d[k]:
+            if isinstance(d[k][k1], dict) is not True:
+                continue
+            for k2 in d[k][k1]:
+                path = f"/etc/init.d/{k}/{k1}/{k2}"
+                ns.V(path, partial(d[k][k1][k2], ns))
+
+def _nsImportCtx(ns, d):
+    if isNothing(d) is True:
+        return
+    for k in d:
+        if isinstance(d[k], dict) is not True:
+            continue
+        ctx = ns.cd(k)
+        for k1 in d[k]:
+            path = f"{k}/{k1}"
+            ns.V(path, partial(d[k][k1], ctx))
 
 
 def _nsImport(ns, module):
@@ -93,5 +123,7 @@ def _nsImport(ns, module):
         _nsImportMkdir(ns, _mod["_mkdir"])
         _nsImportSet(ns, _mod["_set"])
         _nsImportLib(ns, _mod["_lib"])
-        _nsImportLib(ns, _mod["_tpl"])
+        _nsImportTpl(ns, _mod["_tpl"])
+        _nsImportCtx(ns, _mod["_ctx"])
+        _nsImportInit(ns, _mod["_init"])
     return ns

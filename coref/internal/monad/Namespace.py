@@ -235,7 +235,19 @@ class Namespace(Dict):
         res = L(_out)
         res.name = path
         return L(_out)
-
+    def dir(self, path):
+        _out = []
+        v = self._value.get(path, None)
+        if isNothing(v):
+            return NONE
+        if isinstance(v, Monad):
+            v = v.value
+        if isinstance(v, dict) is True and v.get('__dir__', False) is True:
+            for k in v:
+                if re.match(r"\_\_(.*)", k) is not None:
+                    continue
+                _out.append(k)
+        return L(_out)
 def C(*ns):
     for n in ns:
         if isinstance(n, Namespace) is True:

@@ -1,5 +1,7 @@
 import sys
 from coref import *
+from coref.mod import nsImport
+from coref.init import nsInit
 
 def nsNS(*cfg, **kw):
     ns = Namespace(kw)
@@ -10,8 +12,15 @@ def nsNS(*cfg, **kw):
             ns += c
         elif callable(c) is True:
             c(ns)
+        elif hasattr(c, 'isNamespace') is True:
+            ns.update(c)
         else:
             pass
+    nsImport(ns, 'coref.stdlib')
+    more_libs = ns.V("/etc/libraries")
+    if more_libs is not NONE:
+        nsImport(ns, more_libs)
+    nsInit(ns)
     return ns
 
 

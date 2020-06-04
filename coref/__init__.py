@@ -8,3 +8,7 @@ from coref.internal.monad.internal import *
 from coref.ns import *
 from coref.mod import *
 from coref.internal.util import partial
+
+def NS(*cfg, **kw):
+    ns = nsNS(*cfg, **kw)
+    return (ns, ns.V("/bin/f").value, ns.V("/bin/F").value)
