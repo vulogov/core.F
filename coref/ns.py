@@ -19,7 +19,10 @@ def nsNS(*cfg, **kw):
     nsImport(ns, 'coref.stdlib')
     more_libs = ns.V("/etc/libraries")
     if more_libs is not NONE:
-        nsImport(ns, more_libs)
+        nsImport(ns, more_libs.value)
+    more_libs = ns.V("/etc/user.library")
+    if more_libs is not NONE:
+        nsImport(ns, more_libs.value)
     nsInit(ns)
     return ns
 
