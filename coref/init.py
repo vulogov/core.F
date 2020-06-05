@@ -1,19 +1,28 @@
 import atexit
 from coref import *
 
+def nsInitRun(ns, path, name, action=None):
+    _fun = ns.V(f"{path}/{name}")
+    if isNothing(_fun) is True:
+        return False
+    print ("init()", f"{path}/{name}")
+    if action is None:
+        if callable(_fun.value) is not True:
+            return False
+        if _fun.value() is not True:
+            return False
+    else:
+        return action(ns, _fun)
+    return True
+
 def nsInit(ns):
     atexit.register(nsStop, ns)
     init = ns.dir("/etc/init.d")
     for i in init.sort():
         ctx = ns.dir(f"/etc/init.d/{i}")
         for k in ctx.sort():
-            start_fun = ns.V(f"/etc/init.d/{i}/{k}/start")
-            if isNothing(start_fun) is True:
-                continue
-            if callable(start_fun.value) is not True:
-                continue
-            print ("init()", f"/etc/init.d/{i}/{k}/start")
-            if start_fun.value() is not True:
+            path = f"/etc/init.d/{i}/{k}"
+            if nsInitRun(ns, path, 'start') is False:
                 break
     return
 

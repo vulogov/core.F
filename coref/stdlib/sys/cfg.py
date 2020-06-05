@@ -30,7 +30,7 @@ _set = nsValues (
 )
 
 _init = {
-    1: {
+    2: {
         'bund': {
             'start': _systemCfgInit,
         }

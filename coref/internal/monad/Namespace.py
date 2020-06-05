@@ -259,5 +259,8 @@ def f(ns, path, *args, **kw):
 def F(ns, path, *args, **kw):
     return ns.F(path, *args, **kw)
 
+def rF(ns, path, *args, **kw):
+    return ns.F(path, *args, **kw).value
+
 def V(ns, path, value=NONE):
     return ns.V(path, value)

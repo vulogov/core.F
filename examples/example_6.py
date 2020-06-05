@@ -9,3 +9,4 @@ from coref import *
 ns, f, F = NS()
 print ("F(/bin/time)", F("/bin/time").value)
 print ("f(/bin/time)", f("/bin/time")())
+print ("hylang()", ns.V("/sys/hylang.enabled"))
