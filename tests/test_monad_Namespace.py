@@ -158,3 +158,8 @@ def test_monad_Namespace_21():
     ns, f, F = NS()
     F("V", "/home/answer", 42)
     assert F("V", "/home/answer").value == Just(42)
+
+def test_monad_Namespace_22():
+    ns, f, F = NS()
+    f = lf(ns)
+    assert type(f("/bin/time")()) == float

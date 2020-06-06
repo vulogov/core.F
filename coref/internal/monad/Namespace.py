@@ -264,3 +264,12 @@ def rF(ns, path, *args, **kw):
 
 def V(ns, path, value=NONE):
     return ns.V(path, value)
+
+def lf(ns):
+    return ns.f("/bin/f")
+
+def lF(ns):
+    return ns.f("/bin/F")
+
+def lV(ns):
+    return ns.f("/bin/V")
