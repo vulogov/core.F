@@ -26,6 +26,7 @@ _set = nsValues (
         "/config/cfg.path": ['osfs://.','osfs://tests'],
         "/config/cfg.fs": {},
         "/config/cfg.files": [],
+        "/config/cmd.path": "/usr/local/bin"
     }
 )
 
