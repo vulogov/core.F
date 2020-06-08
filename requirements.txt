@@ -45,6 +45,7 @@ psutil==5.7.0
 ptyprocess==0.6.0
 py==1.8.1
 pycparser==2.20
+pyfiglet==0.8.post1
 Pygments==2.6.1
 pyparsing==2.4.7
 pytest==5.4.2
@@ -54,6 +55,7 @@ requests==2.23.0
 rply==0.7.7
 setproctitle==1.1.10
 six==1.14.0
+texttable==1.6.2
 textX==2.1.0
 traitlets==4.3.3
 tzlocal==2.1

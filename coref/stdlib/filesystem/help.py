@@ -41,6 +41,7 @@ __--commandoption__ *option value*.
 
 
 Keep exploring ! __73__ !
+Rendered at: $time.asctime($time.localtime($time.time()))
         """,
     }
 )
