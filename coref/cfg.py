@@ -157,3 +157,10 @@ def nsCfgAppendFs(ns, fsname):
     if fsname not in cfg_fs:
         nsGet(ns, "/config/cfg.fs").value[fsname] = open_fs(fsname)
     return nsGet(ns, "/config/cfg.fs").value[fsname]
+
+def nsCfgListenParse(ns, listenspec):
+    try:
+        ix  = listenspec.index('@')
+        return listenspec[:ix], listenspec[ix+1:]
+    except ValueError:
+        return listenspec, listenspec

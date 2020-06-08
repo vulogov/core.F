@@ -3,12 +3,13 @@ from coref.mod import nsValues, nsList
 _set = nsValues(
     {
         '/etc/library': [],
-        '/etc/user.library': [],
+        '/config/user.library': [],
         '/etc/answer': 42,
         '/config/var.redefine': True,
         '/etc/daemonize': False,
         '/etc/flags/truename': False,
-        '/sys/hylang.enabled': False
+        '/sys/hylang.enabled': False,
+        '/config/cfg.files': [],
     }
 )
 

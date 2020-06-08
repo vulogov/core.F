@@ -3,8 +3,9 @@ from coref import *
 from coref.mod import nsImport
 from coref.init import nsInit
 
-def nsNS(*cfg, **kw):
+def nsNS(argv=sys.argv[1:], *cfg, **kw):
     ns = Namespace(kw)
+    nsSet(ns, "/etc/ARGV", argv)
     for c in cfg:
         if isinstance(c, dict) is True:
             ns.update(c)

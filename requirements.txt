@@ -1,6 +1,7 @@
 appdirs==1.4.4
 appnope==0.1.0
 APScheduler==3.6.3
+args==0.1.0
 Arpeggio==1.9.2
 astor==0.8.1
 attrs==19.3.0
@@ -10,7 +11,10 @@ cffi==1.14.0
 chardet==3.0.4
 Cheetah3==3.2.5
 Click==7.0
+clint==0.5.1
 colorama==0.4.3
+commonmark==0.9.1
+consolemd==0.5.1
 cryptography==2.9.2
 Cython==0.29.19
 decorator==4.4.2
@@ -48,6 +52,7 @@ pytz==2020.1
 pyzmq==19.0.1
 requests==2.23.0
 rply==0.7.7
+setproctitle==1.1.10
 six==1.14.0
 textX==2.1.0
 traitlets==4.3.3
