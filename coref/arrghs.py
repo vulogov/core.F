@@ -117,16 +117,13 @@ def nsArgsParsePopulate(ns, _from, _to, parser):
 
 
 
-def nsCmd(ns, *args, **kw):
+def nsCmd(ns):
     argv = nsGet(ns, "/etc/argv", []).value
     root = nsGet(ns, "/config/cmd.path").value
-    kw.update(nsGet(ns, "/config/cmd.kw").value)
-    out = None
-    is_cmd_run = nsGet(ns, "/config/cmd.run").value
-    if is_cmd_run is True:
+    is_cmd_run = nsGet(ns, "/config/cmd.run")
+    if is_cmd_run == TRUE:
         return ns
     for k in argv:
-        _args = tuple([out,] + list(args))
-        out = f(ns, "{}/{}".format(root, k))(*_args, **kw)
+        out = ns.f("{}/{}".format(root, k))()
         nsSet(ns, "/config/cmd.run", True)
     return ns
