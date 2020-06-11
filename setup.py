@@ -10,6 +10,13 @@ except ImportError:
     from pip.req import parse_requirements
 
 root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+with open("LICENSE", "r") as fh:
+    license_txt = fh.read()
+
 VERSION_PY="""
 VERSION='%s'
 RELEASE='%s'
@@ -17,6 +24,8 @@ URL='%s'
 AUTHOR='%s'
 AUTHOR_EMAIL='%s'
 LICENSE='%s'
+LICENSE_txt = \"\"\"%s\"\"\"
+READ_me = \"\"\"%s\"\"\"
 
 def nsVersion(ns):
     return VERSION
@@ -29,7 +38,7 @@ version="0.0"
 release="0.0.1"
 author='Vladimir Ulogov'
 author_email='vladimir.ulogov@me.com'
-url='https://github.com/vulogov/core.ns'
+url='https://github.com/vulogov/coref'
 license='GPL3'
 
 def load_requirements(fname):
@@ -38,12 +47,11 @@ def load_requirements(fname):
 
 def write_version(fname):
     f = open("{}/{}".format(root_dir, fname), 'w')
-    f.write(VERSION_PY % (version, release, url, author, author_email, license))
+    f.write(VERSION_PY % (version, release, url, author, author_email, license, license_txt, long_description))
 
 write_version("coref/version.py")
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+
 
 setup(name=name,
     setup_requires=['pytest-runner'],

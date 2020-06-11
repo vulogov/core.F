@@ -10,6 +10,8 @@ _set = nsValues(
         '/etc/flags/truename': False,
         '/sys/hylang.enabled': False,
         '/config/cfg.files': [],
+        '/etc/author': 'Unknown',
+        '/etc/author.email': 'noreturn@example.com',
     }
 )
 

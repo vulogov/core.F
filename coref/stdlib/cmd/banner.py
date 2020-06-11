@@ -32,10 +32,10 @@ def nsBanner(ns):
                 ["/etc/release", nsGet(ns, "/etc/release").value, "Application release"],
                 ["/etc/author", nsGet(ns, "/etc/author").value, "Author of application"],
                 ["/etc/author.email", nsGet(ns, "/etc/author.email").value, "Author's email"],
-                ["/etc/corens/version", str(nsGet(ns, "/etc/corens/version").value), "core.NS version"],
-                ["/etc/corens/release", nsGet(ns, "/etc/corens/release").value, "core.NS release"],
+                ["/etc/coref/version", str(nsGet(ns, "/etc/coref/version").value), "core.F version"],
+                ["/etc/coref/release", nsGet(ns, "/etc/coref/release").value, "core.F release"],
                 ["/config/RPCCatchCalls", nsGet(ns, "/config/RPCCatchCalls").value, "Trace RPC"],
-                ["/config/answer", nsGet(ns, "/config/answer").value, "THE ANSWER"],
+                ["/etc/answer", nsGet(ns, "/etc/answer").value, "THE ANSWER"],
             ]
     )
     print(tbl.draw())
