@@ -24,7 +24,6 @@ def nsBanner(ns):
                 ["/sys/env/home", nsGet(ns, "/sys/env/home").value, "Home directory"],
                 ["/sys/env/apphome", nsGet(ns, "/sys/env/apphome").value, "Application home"],
                 ["/sys/env/pidFile", nsGet(ns, "/sys/env/pidFile").value, "PID file"],
-                ["/sys/env/apphome", nsGet(ns, "/sys/env/apphome").value, "Application home"],
                 ["/config/user.library", nsGet(ns, "/config/user.library").value, "Application library"],
                 ["/etc/daemonize", nsGet(ns, "/etc/daemonize").value, "Become daemon ?"],
                 ["/etc/flags/internalServer",nsGet(ns, "/etc/flags/internalServer", False).value,"Enable internal server"],

@@ -3,6 +3,7 @@ from coref import *
 from coref.mod import nsImport
 from coref.init import nsInit
 
+
 def nsNS(argv=sys.argv[1:], *cfg, **kw):
     ns = Namespace(kw)
     nsSet(ns, "/etc/ARGV", argv)
