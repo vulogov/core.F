@@ -89,6 +89,7 @@ class DP:
                 _d[_p[0]] = value.value
                 return value
             else:
+                #print("GGG",_p[0], type(_d), _d,value)
                 _d[_p[0]] = value
                 return Just(value)
         d = _d.get(_p[0], None)

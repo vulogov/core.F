@@ -119,7 +119,8 @@ class Namespace(Dict):
             return NONE
         ns = self._value
         try:
-            res =  Namespace(self._value.get(path))
+            print('YYYY', type(self._value.get(path).value))
+            res =  Namespace(self._value.get(path).value)
         except KeyError:
             res =  self.mkdir(path)
         if hasattr(self, "parent") is True:

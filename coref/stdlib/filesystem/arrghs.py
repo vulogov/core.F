@@ -14,6 +14,13 @@ _set = nsValues(
         '/etc/argv': [],
         '/etc/rpc': {},
         '/etc/groups': [],
+        '/etc/flags/console': True,
+        '/etc/flags/log': False,
+        '/etc/flags/stdout': True,
+        '/etc/flags/daemonize': False,
+        '/etc/flags/color': True,
+        '/etc/flags/pid': False,
+        '/etc/flags/direct': True,
     }
 )
 

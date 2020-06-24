@@ -107,13 +107,21 @@ def _nsImportInit(ns, d):
 def _nsImportCtx(ns, d):
     if isNothing(d) is True:
         return
-    for k in d:
-        if isinstance(d[k], dict) is not True:
+    for k, v in d:
+        if isinstance(v, dict) is not True:
             continue
         ctx = ns.cd(k)
         for k1 in d[k]:
-            path = f"{k}/{k1}"
-            ns.V(path, partial(d[k][k1], ctx))
+            path = f"/{k1}"
+            if callable(d[k][k1]) is True:
+                _data = partial(d[k][k1], ctx)
+            else:
+                _data = d[k][k1]
+            print(path, _data)
+            ctx.V(path, _data)
+        ctx.C()
+
+
 
 
 def _nsImport(ns, module):
