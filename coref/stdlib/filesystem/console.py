@@ -1,5 +1,6 @@
 import sys
 import time
+from clint.textui import indent, puts, colored
 from coref import *
 from coref.mod import nsValues, nsList
 from coref.internal.rb import RingBuffer
@@ -8,24 +9,24 @@ from Cheetah.Template import Template
 
 _CONSOLE = namedtuple('Console', ['stamp', 'msg'])
 
-def nsConsole(ns, *args, **kw):
-    print("HHH",ns)
-    if ns.V("/isConsole") == FALSE:
+def nsConsole(ns, path, *args, **kw):
+    if ns.V(f"{path}/isConsole") == FALSE:
         return False
     _msg = ""
     for a in args:
-        if isinstance(s, str) is True:
+        if isinstance(a, str) is True:
             t = str(Template(a, searchList=[kw]))
             _msg += t
     _cons = _CONSOLE(stamp=time.time(), msg=_msg)
-    if ns.V("/nsDirect") == TRUE:
-        if ns.V("/nsStdout") == TRUE:
+    if ns.V(f"{path}/isDirect") == TRUE:
+        if ns.V(f"{path}/isStdout") == TRUE:
             with indent(4, quote=colored.green(' : ')):
                 puts(_cons.msg)
         else:
-            ns.V("/fd").value.write(_cons.msg+"\n")
+            ns.V(f"{path}/fd").value.write(_cons.msg+"\n")
+            ns.V(f"{path}/fd").value.flush()
     else:
-        ns.V("/buffer").value.append(_cons)
+        ns.V(f"{path}/buffer").value.append(_cons)
     return True
 
 def nsConsoleStop(ns):
@@ -34,7 +35,6 @@ def nsConsoleStop(ns):
     return True
 
 def nsConsoleInit(ns):
-    ns.V("/dev/console/a", True)
     ns.V("/dev/console/isConsole", ns.V("/etc/flags/console").value)
     ns.V("/dev/console/isStdout", ns.V("/etc/flags/stdout"))
     ns.V("/dev/console/isDirect", ns.V("/etc/flags/direct"))

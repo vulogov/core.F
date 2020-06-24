@@ -110,16 +110,13 @@ def _nsImportCtx(ns, d):
     for k, v in d:
         if isinstance(v, dict) is not True:
             continue
-        ctx = ns.cd(k)
         for k1 in d[k]:
-            path = f"/{k1}"
+            path = f"{k}/{k1}"
             if callable(d[k][k1]) is True:
-                _data = partial(d[k][k1], ctx)
+                _data = partial(d[k][k1], ns, k)
             else:
                 _data = d[k][k1]
-            print(path, _data)
-            ctx.V(path, _data)
-        ctx.C()
+            ns.V(path, _data)
 
 
 

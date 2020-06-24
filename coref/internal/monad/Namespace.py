@@ -205,6 +205,7 @@ class Namespace(Dict):
             if isNothing(tb) is not True:
                 tb.value.append(res)
                 self.V('/sys/traceback/exists', True)
+            print(res)
             return Left(res)
 
     def ls(self, path: str, patt: str="*", **kw) -> 'L':

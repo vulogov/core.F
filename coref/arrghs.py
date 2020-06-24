@@ -85,7 +85,7 @@ def nsArgs(ns):
     nsSet(ns, "/etc/daemonize", nsGet(ns, "/etc/flags/daemonize", False).value)
     nsSet(ns, "/etc/console", nsGet(ns, "/etc/flags/console", False).value)
     nsSet(ns, "/etc/log", nsGet(ns, "/etc/flags/log", False).value)
-    colored.DISABLE_COLOR=nsGet(ns, "/etc/flags/color", False).value
+    colored.DISABLE_COLOR=not nsGet(ns, "/etc/flags/color", False).value
     return ns
 
 def nsArgsPopulate(ns, _from, _to):
