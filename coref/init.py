@@ -1,4 +1,7 @@
+import sys
+import signal
 import atexit
+from coref.internal.util import partial
 from coref import *
 
 def nsInitRun(ns, path, name, action=None):
@@ -17,6 +20,7 @@ def nsInitRun(ns, path, name, action=None):
 
 def nsInit(ns):
     atexit.register(nsStop, ns)
+    signal.signal(signal.SIGTERM, nsForceExit)
     init = ns.dir("/etc/init.d")
     for i in init.sort():
         ctx = ns.dir(f"/etc/init.d/{i}")
@@ -26,16 +30,29 @@ def nsInit(ns):
                 break
     return
 
+def nsForceExit(signo, frame):
+    sys.exit(0)
+
 def nsStop(ns):
     init = ns.dir("/etc/init.d")
     for i in init.sort().reverse():
         ctx = ns.dir(f"/etc/init.d/{i}")
         for k in ctx.sort().reverse():
-            stop_fun = ns.V(f"/etc/init.d/{i}/{k}/stop")
-            if isNothing(stop_fun) is True:
-                continue
-            if callable(stop_fun) is not True:
-                continue
-            if stop_fun.value() is not True:
+            path = f"/etc/init.d/{i}/{k}"
+            if nsInitRun(ns, path, 'stop') is False:
                 break
     return
+
+def nsInitRegister(ns, fun, **kw):
+    if isinstance(fun, Monad) is True:
+        _fun = fun.value
+    else:
+        _fun = fun
+    if callable(fun) is not True:
+        return False
+    name = kw.get('name', _fun)
+    level = kw.get('level', 999)
+    action = kw.get('action', 'start')
+    _fun = partial(_fun, ns)
+    ns.V(f"/etc/init.d/{level}/{name}/{action}", _fun)
+    return True

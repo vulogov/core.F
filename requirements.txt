@@ -17,6 +17,7 @@ commonmark==0.9.1
 consolemd==0.5.1
 cryptography==2.9.2
 Cython==0.29.19
+daemon==1.2
 decorator==4.4.2
 dill==0.3.1.1
 fs==2.4.11

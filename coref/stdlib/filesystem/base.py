@@ -17,6 +17,7 @@ _set = nsValues(
 
 _mkdir = [
     '/bin',
+    '/sbin',
     '/home',
     '/tmp',
     '/etc',

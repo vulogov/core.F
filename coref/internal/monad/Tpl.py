@@ -8,3 +8,6 @@ class Tpl(Just):
         Just.__init__(self, value)
     def __call__(self, ns: Namespace) -> str:
         return str(Template(self.value, searchList=[ns.raw().raw()]))
+
+def nsTxt(ns, msg):
+    return Tpl(msg)(ns)
