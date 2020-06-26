@@ -30,4 +30,6 @@ _mkdir = [
     '/dev',
     '/templates',
     '/etc/corens',
+    '/etc/init.d',
+    '/etc/init.app',
 ]

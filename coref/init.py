@@ -50,7 +50,7 @@ def nsInitRegister(ns, fun, **kw):
         _fun = fun
     if callable(fun) is not True:
         return False
-    name = kw.get('name', _fun)
+    name = kw.get('name', _fun.__name__)
     level = kw.get('level', 999)
     action = kw.get('action', 'start')
     _fun = partial(_fun, ns)
