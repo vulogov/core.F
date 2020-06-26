@@ -21,6 +21,7 @@ _set = nsValues(
         '/etc/flags/color': True,
         '/etc/flags/pid': False,
         '/etc/flags/direct': True,
+        '/etc/flags/cookie': False,
     }
 )
 

@@ -155,7 +155,10 @@ def nsCfgAppendFs(ns, fsname):
         return NONE
     cfg_fs = cfg_fs.value
     if fsname not in cfg_fs:
-        nsGet(ns, "/config/cfg.fs").value[fsname] = open_fs(fsname)
+        try:
+            nsGet(ns, "/config/cfg.fs").value[fsname] = open_fs(fsname)
+        except fs.errors.CreateFailed:
+            return None
     return nsGet(ns, "/config/cfg.fs").value[fsname]
 
 def nsCfgListenParse(ns, listenspec):

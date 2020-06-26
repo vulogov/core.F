@@ -8,4 +8,5 @@ from coref import *
 
 ns, f, F = NS()
 res = F("/dev/console/send", "Hello, console!")
+print(ns.V("/home/NotAnswer"))
 print(res)

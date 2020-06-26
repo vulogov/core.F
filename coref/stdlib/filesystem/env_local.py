@@ -19,6 +19,7 @@ def nsEnvLocal(ns):
     cfg_path.append("osfs://{}".format(CNS_HOME))
     if check_the_path(ns, "/etc/{}".format(CNS_NAME)) is True:
         cfg_path.append("osfs:///etc/{}".format(CNS_NAME))
+    cfg_path.append("osfs:///etc/coref/{}".format(CNS_NAME))
     nsSet(ns, "/config/cfg.path", cfg_path)
     nsSet(ns, "/sys/env/pidFile", "{}/{}.pid".format(CNS_HOME, CNS_NAME))
     for p in cfg_path:
@@ -30,13 +31,17 @@ def nsEnvLocalCleanup(ns):
 
 def nsSecurityStart(ns, *args, **kw):
     nsSet(ns, "/security/cookie", str(uuid.uuid4()))
+    if nsGet(ns, "/etc/flags/cookie").value is False:
+        return True
     apphome = nsGet(ns, "/sys/env/apphome").value
     with open("{}/cookie".format(apphome), "w") as f:
         f.write(nsGet(ns, "/security/cookie").value)
-    return
+    return True
 
 
 def nsSecurityStop(ns, *args, **kw):
+    if nsGet(ns, "/etc/flags/cookie").value is False:
+        return True
     apphome = nsGet(ns, "/sys/env/apphome").value
     cookie_path = "{}/cookie".format(apphome)
     if os.path.exists(cookie_path) is True and os.path.isfile(cookie_path) is True:
