@@ -1,6 +1,6 @@
 
 VERSION='0.0'
-RELEASE='0.0.2'
+RELEASE='0.0.3'
 URL='https://github.com/vulogov/coref'
 AUTHOR='Vladimir Ulogov'
 AUTHOR_EMAIL='vladimir.ulogov@me.com'
