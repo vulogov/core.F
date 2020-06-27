@@ -1,6 +1,6 @@
 from fs.opener import open_fs
 from fs.errors import CreateFailed
-from coref.cfg import nsCfgGrammar, nsCfgLoad, nsCfgFSLoad, nsCfgAppendFs
+from coref.cfg import nsCfgGrammar, nsCfgLoad, nsCfgFSLoad, nsCfgAppendFs, nsCfgYamlLoad
 from coref.mod import nsValues, nsList
 from coref.ns import nsGet
 from coref.internal.monad.internal import isNothing
@@ -19,6 +19,7 @@ _lib = {
     '/bin/C': nsCfgLoad,
     '/bin/Cfg': nsCfgFSLoad,
     '/bin/FSCfg': nsCfgAppendFs,
+    '/bin/yaml': nsCfgYamlLoad,
 }
 
 _set = nsValues (

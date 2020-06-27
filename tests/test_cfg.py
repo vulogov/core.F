@@ -26,6 +26,11 @@ def test_cfg_4():
     F("Cfg", "test.cfg")
     assert ns.V('/home/NotAnswer') == Just(41)
 
+def test_cfg_4_1():
+    ns, f, F = NS()
+    F("Cfg", "test.yaml")
+    assert ns.V('/home/NotAnswer') == Just(41)
+
 def test_cfg_5():
     ns, f, F = NS()
     F("C", '("test.cfg">')

@@ -92,7 +92,11 @@ def nsCfgLoad(ns, cfg):
     return nsCfgVM(ns, model)
 
 def nsCfgYamlLoad(ns, cfg):
-    return None
+    res = {}
+    for c in yaml.safe_load_all(cfg):
+        res.update(c)
+    ns.raw().update(res)
+    return res
 
 
 def nsCfgVM(ns, model):
@@ -117,7 +121,10 @@ def nsCfgFSLoad(ns, name):
     data = _nsCfgFSLoad(ns, name)
     if data is None:
         return ns
-    nsCfgLoad(ns, data)
+    if name.split(".")[-1].lower() == "yaml":
+        nsCfgYamlLoad(ns, data)
+    else:
+        nsCfgLoad(ns, data)
     return ns
 
 def nsCfgVMData(ns, data):
