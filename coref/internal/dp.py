@@ -41,8 +41,19 @@ class DP:
     def keys(self):
         return self._value.keys()
 
+    def __dpizedit(self, x, name="/"):
+        if isinstance(x, dict) is True and '__dir__' not in x:
+            x["__dir__"] = True
+            x["__name__"] = name
+            x["__id__"] = str(uuid.uuid4())
+            x["__stamp__"] = time.time()
+            for k in x:
+                x[k] = self.__dpizedit(x[k], f"{name}/{k}")
+        return x
+
     def update(self, x):
         if isinstance(x, dict) is True:
+            x = self.__dpizedit(x, "/")
             self._value = mergedicts(self._value, x)
             return self
         if hasattr(x, 'isNamespace') is True:
