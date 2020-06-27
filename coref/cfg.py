@@ -1,4 +1,5 @@
 import fs
+import yaml
 from fs.opener import open_fs
 import fs.errors
 from coref.ns import *
@@ -89,6 +90,10 @@ def nsCfgGrammar(ns):
 def nsCfgLoad(ns, cfg):
     model = ns.V("/sys/metamodel").value.model_from_str(cfg)
     return nsCfgVM(ns, model)
+
+def nsCfgYamlLoad(ns, cfg):
+    return None
+
 
 def nsCfgVM(ns, model):
     for inc in model.i:
