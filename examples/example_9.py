@@ -9,10 +9,14 @@ from coref import *
 def appconfig(ns):
     print("Application config")
 
-def cb(*args):
-    for i in args:
-        print(type(i))
-    print(args[1])
+def cb(ns, path, _socket, _addr):
+    c = 0
+    while len(ns.V(f"{path}/in").value) > 0:
+        data = ns.V(f"{path}/in").value.get()
+        ns.V(f"{path}/out").value.put(data)
+        c += 1
+    if c > 0:
+        return True
     return False
 
 

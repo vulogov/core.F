@@ -2,12 +2,18 @@ import uuid
 from coref import *
 from .gevent import nsSpawn
 from gevent.server import StreamServer
+from gevent.select import select
 from gevent.queue import Queue
 
 def nsTcpLoop(ns, server):
     server.serve_forever()
 
 def nsTcpCreate(ns, listen, port, callback):
+    class CoreTcpServer(StreamServer):
+        def do_close(self, sock, *args):
+            StreamServer.do_close(self, sock, *args)
+    def _close(ns, path):
+        return
     def _callback(ns, path, callback, _socket, _addr):
         def recvall(sock):
             BUFF_SIZE = 4096 # 4 KiB
@@ -21,16 +27,41 @@ def nsTcpCreate(ns, listen, port, callback):
         _id = str(uuid.uuid4())
         cpath = f"{path}/{_id}"
         ns.mkdir(cpath)
-        ns.V(f"{cpath}/in", Queue)
-        ns.V(f"{cpath}/out", Queue)
-        print("AAA")
-        while callback(ns, cpath, _socket, _addr):
-            print("BBB")
+        ns.V(f"{cpath}/in", Queue())
+        ns.V(f"{cpath}/out", Queue())
+        idle = ns.V(f"{path}/idleLoops").value
+        tmout = ns.V(f"{path}/waitForData").value
+        try:
+            _r, _w, _x = select([_socket.fileno()], [], [], tmout)
+        except ValueError:
+            _close(ns, cpath)
+            return
+        if len(_r) > 0:
+            data = recvall(_socket)
+            if len(data) == 0:
+                _close(ns, cpath)
+                return
+            ns.V(f"{cpath}/in").value.put(data)
+        c = 0
+        while callback(ns, cpath, _socket, _addr) or c < idle:
             while len(ns.V(f"{cpath}/out").value) > 0:
                 data = ns.V(f"{cpath}/out").value.get()
                 _socket.sendall(data)
+            try:
+                _r, _w, _x = select([_socket.fileno()], [], [], tmout)
+            except:
+                _close(ns, path)
+                break
+            if len(_r) > 0:
                 data = recvall(_socket)
+                if len(data) == 0:
+                    break
                 ns.V(f"{cpath}/in").value.put(data)
+                c = 0
+            else:
+                c += 1
+                print(c,idle)
+        _close(ns, cpath)
 
 
     path = f"/dev/tcp/server/{listen}/{port}"
@@ -39,8 +70,9 @@ def nsTcpCreate(ns, listen, port, callback):
     ns.mkdir(path)
     ns.V(f"{path}/callback", callback)
     ns.V(f"{path}/serverInitialized", True)
-
-    server = StreamServer((listen, port), partial(_callback, ns, path, callback))
+    ns.V(f"{path}/waitForData", 3)
+    ns.V(f"{path}/idleLoops", 100)
+    server = CoreTcpServer((listen, port), partial(_callback, ns, path, callback))
     server.start()
     nsSpawn(ns, path, nsTcpLoop, ns, server)
     return TRUE
