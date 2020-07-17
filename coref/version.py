@@ -1,7 +1,7 @@
 
-VERSION='0.0'
-RELEASE='0.0.3'
-URL='https://github.com/vulogov/coref'
+VERSION='0.1'
+RELEASE='0.1.1'
+URL='https://github.com/vulogov/core.F'
 AUTHOR='Vladimir Ulogov'
 AUTHOR_EMAIL='vladimir.ulogov@me.com'
 LICENSE='GPL3'

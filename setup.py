@@ -35,7 +35,7 @@ def nsRelease(ns):
 
 name="coref"
 version="0.1"
-release="0.1.0"
+release="0.1.1"
 author='Vladimir Ulogov'
 author_email='vladimir.ulogov@me.com'
 url='https://github.com/vulogov/core.F'
