@@ -13,6 +13,7 @@ def nsTcpCreate(ns, listen, port, callback):
         def do_close(self, sock, *args):
             StreamServer.do_close(self, sock, *args)
     def _close(ns, path):
+        ns.rmdir(path)
         return
     def _callback(ns, path, callback, _socket, _addr):
         def recvall(sock):
@@ -60,7 +61,7 @@ def nsTcpCreate(ns, listen, port, callback):
                 c = 0
             else:
                 c += 1
-                print(c,idle)
+                #print(c,idle)
         _close(ns, cpath)
 
 
@@ -71,7 +72,7 @@ def nsTcpCreate(ns, listen, port, callback):
     ns.V(f"{path}/callback", callback)
     ns.V(f"{path}/serverInitialized", True)
     ns.V(f"{path}/waitForData", 3)
-    ns.V(f"{path}/idleLoops", 100)
+    ns.V(f"{path}/idleLoops", 10)
     server = CoreTcpServer((listen, port), partial(_callback, ns, path, callback))
     server.start()
     nsSpawn(ns, path, nsTcpLoop, ns, server)

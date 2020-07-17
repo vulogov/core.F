@@ -108,7 +108,6 @@ class Namespace(Dict):
             _nns.parent = self
         self._clone(self, _nns, "stor")
         return _nns
-
     def Cd(self, *path) -> tuple:
         _res = []
         for i in unique(path):
@@ -119,7 +118,6 @@ class Namespace(Dict):
             return NONE
         ns = self._value
         try:
-            print('YYYY', type(self._value.get(path).value))
             res =  Namespace(self._value.get(path).value)
         except KeyError:
             res =  self.mkdir(path)
@@ -129,7 +127,8 @@ class Namespace(Dict):
             res.parent = self
         self._clone(self, res, "stor")
         return res
-
+    def rmdir(self, path: str):
+        return Just(self.raw().rm(path))
     def C(self):
         if hasattr(self, "parent"):
             self.parent.raw().set(self.Name().value, self._value)

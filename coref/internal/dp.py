@@ -134,6 +134,17 @@ class DP:
             d = self._mkdir(_d, _p[0], _fp)
         return self._get(_p[1:], _fp, d, default)
 
+    def rm(self, path):
+        _dir = self.get(os.path.dirname(path))
+        if isinstance(_dir, Nothing) is True:
+            return False
+        _dir = _dir.value
+        _basename = os.path.basename(path)
+        if _basename in _dir and isinstance(_dir[_basename], dict) is True and _dir[_basename]['__dir__'] is True:
+            del _dir[_basename]
+        _dir = self.get(os.path.dirname(path)).value
+        return True
+
     def raw(self):
         return self._value
 

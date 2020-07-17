@@ -81,12 +81,18 @@ def nsLoopPrep(ns):
 
 
 def nsLoopSysMain(ns):
-    nsLoopPrep(ns)
-    nsLoopSys(ns)
+    try:
+        nsLoopPrep(ns)
+        nsLoopSys(ns)
+    except KeyboardInterrupt:
+        print("SIGNAL from Keyboard")
 
 def nsLoopUserMain(ns):
-    nsLoopPrep(ns)
-    nsLoopUser(ns)
+    try:
+        nsLoopPrep(ns)
+        nsLoopUser(ns)
+    except KeyboardInterrupt:
+        print("SIGNAL from Keyboard")
 
 def nsLoop(ns):
     if nsGet(ns, "/etc/daemonize").value is True:
