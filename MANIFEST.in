@@ -1,0 +1,8 @@
+global-exclude *.py[cod]
+recursive-include examples
+recursive-include tests
+include README
+include setup.*
+include requirements.txt
+include README.md
+include LICENSE
