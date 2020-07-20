@@ -15,5 +15,4 @@ from coref.internal.util import partial
 
 def NS(argv=sys.argv[1:], *cfg, **kw):
     ns = nsNS(argv, *cfg, **kw)
-    nsCmd(ns)
     return (ns, ns.V("/bin/f").value, ns.V("/bin/F").value)

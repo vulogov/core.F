@@ -3,6 +3,7 @@ import signal
 import atexit
 from coref.internal.util import partial
 from coref.init import nsInitRun
+from coref.arrghs import nsCmd
 from coref import *
 
 
@@ -17,7 +18,8 @@ def nsAppStart(ns):
             path = f"/etc/init.app/{i}/{k}"
             if nsInitRun(ns, path, 'start') is False:
                 break
-    return
+    return nsCmd(ns)
+
 
 def nsAppStop(ns):
     init = ns.dir("/etc/init.app")
