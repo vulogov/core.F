@@ -1,6 +1,6 @@
 
 VERSION='0.1'
-RELEASE='0.1.1'
+RELEASE='0.1.2'
 URL='https://github.com/vulogov/core.F'
 AUTHOR='Vladimir Ulogov'
 AUTHOR_EMAIL='vladimir.ulogov@me.com'
