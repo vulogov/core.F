@@ -3,7 +3,7 @@ import signal
 import atexit
 from coref.internal.util import partial
 from coref.init import nsInitRun
-from coref.arrghs import nsCmd
+from coref.cmd import nsCmd
 from coref import *
 
 

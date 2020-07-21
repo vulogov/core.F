@@ -2,7 +2,6 @@ import sys
 from coref import *
 from coref.mod import nsImport
 from coref.init import nsInit
-from coref.app import nsAppInit
 
 
 def nsNS(argv=sys.argv[1:], *cfg, **kw):
@@ -27,7 +26,6 @@ def nsNS(argv=sys.argv[1:], *cfg, **kw):
     if more_libs is not NONE:
         nsImport(ns, more_libs.value)
     nsInit(ns)
-    nsAppInit(ns)
     return ns
 
 

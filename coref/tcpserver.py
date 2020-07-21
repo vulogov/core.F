@@ -16,11 +16,19 @@ def nsTcpCreate(ns, listen, port, callback):
         ns.rmdir(path)
         return
     def _callback(ns, path, callback, _socket, _addr):
-        def recvall(sock):
-            BUFF_SIZE = 4096 # 4 KiB
+        def recvall(sock, buf_size, tmout):
+            BUFF_SIZE = buf_size
             data = b''
             while True:
+                try:
+                    _r, _w, _x = select([sock.fileno()], [], [], tmout)
+                except ValueError:
+                    break
+                if len(_r) == 0:
+                    break
                 part = sock.recv(BUFF_SIZE)
+                if len(part) == 0:
+                    break
                 data += part
                 if len(part) < BUFF_SIZE:
                     break
@@ -32,13 +40,14 @@ def nsTcpCreate(ns, listen, port, callback):
         ns.V(f"{cpath}/out", Queue())
         idle = ns.V(f"{path}/idleLoops").value
         tmout = ns.V(f"{path}/waitForData").value
+        buf_size = ns.V("/etc/tcpBufSize").value
         try:
             _r, _w, _x = select([_socket.fileno()], [], [], tmout)
         except ValueError:
             _close(ns, cpath)
             return
         if len(_r) > 0:
-            data = recvall(_socket)
+            data = recvall(_socket, buf_size, tmout)
             if len(data) == 0:
                 _close(ns, cpath)
                 return
@@ -54,7 +63,7 @@ def nsTcpCreate(ns, listen, port, callback):
                 _close(ns, path)
                 break
             if len(_r) > 0:
-                data = recvall(_socket)
+                data = recvall(_socket, buf_size, tmout)
                 if len(data) == 0:
                     break
                 ns.V(f"{cpath}/in").value.put(data)

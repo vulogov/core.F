@@ -22,8 +22,11 @@ def cb(ns, path, _socket, _addr):
 
 ns, f, F = NS()
 F("/bin/initAppRegister", appconfig, level=1, action='start')
+print("60000")
 F("/bin/tcpServer", "0.0.0.0", 60000, cb)
+print("60001")
 F("/bin/tcpServer", "0.0.0.0", 60001, cb)
+print("/bin/main")
 F("/bin/main")
 
 F("/usr/local/bin/daemon")

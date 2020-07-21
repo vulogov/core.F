@@ -9,7 +9,7 @@ from coref.internal.monad.internal import *
 from coref.ns import *
 from coref.mod import *
 from coref.cfg import nsCfgLoad, nsCfgFSLoad
-from coref.arrghs import nsArgs, nsCmd
+from coref.arrghs import nsArgs
 from coref.help import nsHelp
 from coref.internal.util import partial
 

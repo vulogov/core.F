@@ -5,7 +5,7 @@ import os.path
 import socket
 from fs.opener import open_fs
 from fs.errors import CreateFailed
-from coref.ns import *
+from coref.ns import nsSet, nsGet
 from coref.cfg import nsCfgAppendFs, nsCfgListenParse
 from coref.help import nsHelp
 from clint.textui import colored
@@ -114,16 +114,3 @@ def nsArgsParsePopulate(ns, _from, _to, parser):
         if _k not in _to_data:
             _to_data[_k] = _v
     return _to_data
-
-
-
-def nsCmd(ns):
-    argv = nsGet(ns, "/etc/argv", []).value
-    root = nsGet(ns, "/config/cmd.path").value
-    is_cmd_run = nsGet(ns, "/config/cmd.run")
-    if is_cmd_run == TRUE:
-        return ns
-    for k in argv:
-        out = ns.f("{}/{}".format(root, k))()
-        nsSet(ns, "/config/cmd.run", True)
-    return ns
