@@ -5,7 +5,7 @@ import os.path
 import socket
 from fs.opener import open_fs
 from fs.errors import CreateFailed
-from coref.ns import nsSet, nsGet
+from coref.ns import *
 from coref.cfg import nsCfgAppendFs, nsCfgListenParse
 from coref.help import nsHelp
 from clint.textui import colored

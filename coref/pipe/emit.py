@@ -8,7 +8,7 @@ def nsEmitCreate(ns, name, addr, *cb):
     def _loop(ns, path, addr, cb):
         _out = ns.V(f"{path}/out").value
         _name = ns.V(f"{path}/name").value
-        ctx = zm1q.Context()
+        ctx = zmq.Context()
         socket = ctx.socket(zmq.PUB)
         socket.bind(addr)
         while True:
@@ -16,18 +16,19 @@ def nsEmitCreate(ns, name, addr, *cb):
                 data = _out.get()
                 for fun in cb:
                     data = fun(ns, data)
-                socket.send([
-                    bytes(_name).encode("utf-8"),
+                socket.send_multipart([
+                    bytes(_name, "utf-8"),
                     data
-                ])
+                ], copy=False)
             gevent.time.sleep(0.5)
 
 
     path = f"/dev/pipe/emitter/{name}"
-    name = f"pipe:emitter:{name}"
+    p_name = f"pipe:emitter:{name}"
     _dir = ns.V(path)
-    if _dir is not NONE:
+    if isNothing(_dir) is False:
         return _dir
+    ns.mkdir(path)
     ns.V(f"{path}/out", Queue())
     ns.V(f"{path}/name", name)
-    nsSpawn(ns, name, _loop, ns, path, addr, cb)
+    nsSpawn(ns, p_name, _loop, ns, path, addr, cb)
