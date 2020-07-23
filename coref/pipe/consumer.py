@@ -8,6 +8,7 @@ def nsConsumerCreate(ns, name, *addr):
     def _loop(ns, path, *addr):
         _in = ns.V(f"{path}/in").value
         _name = ns.V(f"{path}/name").value
+        _cb = ns.V(f"{path}/callbacks").value
         ctx = zmq.Context()
         socket = ctx.socket(zmq.SUB)
         for a in addr:
@@ -21,6 +22,9 @@ def nsConsumerCreate(ns, name, *addr):
                 s = dict(poller.poll(1.0))
                 if socket in s and s[socket] == zmq.POLLIN:
                     data = socket.recv_multipart()
+                    for fun_name in _cb:
+                        gevent.time.sleep(0)
+                        data = _cb[fun_name](ns, path, data)
                     _in.put(data)
                 else:
                     break
@@ -34,4 +38,5 @@ def nsConsumerCreate(ns, name, *addr):
         return _dir
     ns.V(f"{path}/in", Queue())
     ns.V(f"{path}/name", name)
+    ns.V(f"{path}/callbacks", {})
     nsSpawn(ns, p_name, _loop, ns, path, *addr)

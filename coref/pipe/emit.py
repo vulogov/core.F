@@ -8,6 +8,7 @@ def nsEmitCreate(ns, name, addr, *cb):
     def _loop(ns, path, addr, cb):
         _out = ns.V(f"{path}/out").value
         _name = ns.V(f"{path}/name").value
+        _cb = ns.V(f"{path}/callbacks").value
         ctx = zmq.Context()
         socket = ctx.socket(zmq.PUB)
         socket.bind(addr)
@@ -16,6 +17,8 @@ def nsEmitCreate(ns, name, addr, *cb):
                 data = _out.get()
                 for fun in cb:
                     data = fun(ns, data)
+                for fun_name in _cb:
+                    data = _cb[fun_name](ns, path, data)
                 socket.send_multipart([
                     bytes(_name, "utf-8"),
                     data
@@ -31,4 +34,5 @@ def nsEmitCreate(ns, name, addr, *cb):
     ns.mkdir(path)
     ns.V(f"{path}/out", Queue())
     ns.V(f"{path}/name", name)
+    ns.V(f"{path}/callbacks", {})
     nsSpawn(ns, p_name, _loop, ns, path, addr, cb)

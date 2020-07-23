@@ -10,6 +10,10 @@ from coref import *
 def appconfig(ns):
     print("Application config")
 
+def cb_echo(ns, path, data):
+    print("RECV", path, data)
+    return data
+
 def pull(ns):
     q = ns.V("/dev/pipe/consumer/test/in").value
     while True:
@@ -21,6 +25,7 @@ def pull(ns):
 ns, f, F = NS()
 F("/bin/initAppRegister", appconfig, level=1, action='start')
 F("/bin/pipeConsumer", "test", "tcp://127.0.0.1:60000")
+F("/bin/pipeRegisterCallback", "/dev/pipe/consumer/test", "echo", cb_echo)
 F("/bin/spawn", "puller", pull)
 F("/bin/main")
 F("/usr/local/bin/daemon")
