@@ -16,6 +16,7 @@ _lib = {
     '/bin/pipeConsumer': nsConsumerCreate,
     '/bin/pipePush': nsPusherCreate,
     '/bin/pipePull': nsPullerCreate,
+    '/bin/pipeStreamer': nsStreamerCreate,
     '/bin/pipeRegisterCallback': pipeRegisterCallback,
 }
 
@@ -25,5 +26,5 @@ _mkdir = [
     '/dev/pipe/consumer',
     '/dev/pipe/push',
     '/dev/pipe/pull',
-
+    '/dev/pipe/streamer',
 ]
