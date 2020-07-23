@@ -11,7 +11,7 @@ def pipeDevice(ns, path, dev_type, fe_addr, fe_type, be_addr, be_type, *_cb):
         for c in _cb:
             c(ns, path, context, frontend, backend)
         zmq.device(dev_type, frontend, backend)
-    except Exception, e:
+    except Exception as e:
         print(e)
         ns.F("/bin/registerException")
     finally:
