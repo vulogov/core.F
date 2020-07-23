@@ -16,7 +16,7 @@ def nsConsumerCreate(ns, name, *addr):
         poller = zmq.Poller()
         poller.register(socket, zmq.POLLIN)
         socket.subscribe(bytes(_name, "utf-8"))
-        while True:
+        while ns.V(f"{path}/continue").value:
             while True:
                 gevent.time.sleep(0)
                 s = dict(poller.poll(1.0))
@@ -29,6 +29,7 @@ def nsConsumerCreate(ns, name, *addr):
                 else:
                     break
             gevent.time.sleep(0.5)
+        ctx.term()
 
 
     path = f"/dev/pipe/consumer/{name}"
@@ -39,4 +40,5 @@ def nsConsumerCreate(ns, name, *addr):
     ns.V(f"{path}/in", Queue())
     ns.V(f"{path}/name", name)
     ns.V(f"{path}/callbacks", {})
+    ns.V(f"{path}/continue", True)
     nsSpawn(ns, p_name, _loop, ns, path, *addr)

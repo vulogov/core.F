@@ -12,7 +12,7 @@ def nsEmitCreate(ns, name, addr, *cb):
         ctx = zmq.Context()
         socket = ctx.socket(zmq.PUB)
         socket.bind(addr)
-        while True:
+        while ns.V(f"{path}/continue").value:
             while len(_out) > 0:
                 data = _out.get()
                 for fun in cb:
@@ -24,6 +24,7 @@ def nsEmitCreate(ns, name, addr, *cb):
                     data
                 ], copy=False)
             gevent.time.sleep(0.5)
+        ctx.term()
 
 
     path = f"/dev/pipe/emitter/{name}"
@@ -35,4 +36,5 @@ def nsEmitCreate(ns, name, addr, *cb):
     ns.V(f"{path}/out", Queue())
     ns.V(f"{path}/name", name)
     ns.V(f"{path}/callbacks", {})
+    ns.V(f"{path}/continue", True)
     nsSpawn(ns, p_name, _loop, ns, path, addr, cb)
