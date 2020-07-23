@@ -14,6 +14,8 @@ def pipeRegisterCallback(ns, path, name, fun):
 _lib = {
     '/bin/pipeEmitter': nsEmitCreate,
     '/bin/pipeConsumer': nsConsumerCreate,
+    '/bin/pipePush': nsPusherCreate,
+    '/bin/pipePull': nsPullerCreate,
     '/bin/pipeRegisterCallback': pipeRegisterCallback,
 }
 
@@ -21,4 +23,7 @@ _mkdir = [
     '/dev/pipe',
     '/dev/pipe/emitter',
     '/dev/pipe/consumer',
+    '/dev/pipe/push',
+    '/dev/pipe/pull',
+
 ]
