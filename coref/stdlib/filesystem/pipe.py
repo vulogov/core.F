@@ -1,6 +1,12 @@
 from coref.mod import nsValues, nsList
 from coref.pipe.emit import nsEmitCreate
 from coref.pipe.consumer import nsConsumerCreate
+from coref.pipe.pusher import nsPusherCreate
+from coref.pipe.puller import nsPullerCreate
+from coref.pipe.streamer import nsStreamerCreate
+
+
+
 
 def pipeRegisterCallback(ns, path, name, fun):
     _cb = ns.V(f"{path}/callbacks").value
