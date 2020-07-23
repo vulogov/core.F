@@ -9,6 +9,30 @@ _F_TRACE_CAP = 100
 _TB_CAP = 100
 
 
+def nsRegisterException(ns):
+    _t, _val, _tb = sys.exc_info()
+    exc = ns.V('/config/exception').value
+    if isNothing(exc) is not True:
+        res = exc(type=_t, value=_val, traceback=_tb)
+    else:
+        res = {}
+        res['type'] = _t
+        res['value'] = _val
+        res['traceback'] = _tb
+    tb = ns.V('/sys/traceback/tb')
+    if isNothing(tb) is not True:
+        tb.value.append(res)
+        ns.V('/sys/traceback/exists', True)
+
+def nsClearException(ns):
+    ns.V('/sys/traceback/exists', False)
+
+
+_lib = {
+    '/bin/registerException': nsRegisterException,
+    '/bin/clearException': nsClearException
+}
+
 _set = nsValues(
     {
         '/sys/traceback/exists': False,

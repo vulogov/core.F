@@ -1,36 +1,11 @@
 import gevent.time
 import zmq.green as zmq
+from .loop import *
 from coref import *
 from coref.gevent import nsSpawn
 from gevent.queue import Queue
 
 def nsPullerCreate(ns, name, *addr):
-    def _loop(ns, path, *addr):
-        _in = ns.V(f"{path}/in").value
-        _name = ns.V(f"{path}/name").value
-        _cb = ns.V(f"{path}/callbacks").value
-        ctx = zmq.Context()
-        socket = ctx.socket(zmq.PULL)
-        for a in addr:
-            socket.connect(a)
-        poller = zmq.Poller()
-        poller.register(socket, zmq.POLLIN)
-        while ns.V(f"{path}/continue").value:
-            while True:
-                gevent.time.sleep(0)
-                s = dict(poller.poll(1.0))
-                if socket in s and s[socket] == zmq.POLLIN:
-                    data = socket.recv_multipart()
-                    for fun_name in _cb:
-                        gevent.time.sleep(0)
-                        data = _cb[fun_name](ns, path, data)
-                    _in.put(data)
-                else:
-                    break
-            gevent.time.sleep(0.5)
-        ctx.term()
-
-
     path = f"/dev/pipe/pull/{name}"
     p_name = f"pipe:pull:{name}"
     _dir = ns.V(path)
@@ -40,4 +15,4 @@ def nsPullerCreate(ns, name, *addr):
     ns.V(f"{path}/name", name)
     ns.V(f"{path}/callbacks", {})
     ns.V(f"{path}/continue", True)
-    nsSpawn(ns, p_name, _loop, ns, path, *addr)
+    nsSpawn(ns, p_name, _recv_loop, ns, path, zmq.PULL, *addr)
