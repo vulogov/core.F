@@ -19,7 +19,7 @@ consolemd==0.5.1
 cryptography==2.9.2
 Cython==0.29.19
 decorator==4.4.2
-dill==0.3.1.1
+dill==0.3.2
 docutils==0.16
 fs==2.4.11
 funcparserlib==0.3.6
