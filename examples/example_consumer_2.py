@@ -16,11 +16,11 @@ def cb_echo(ns, path, data):
 
 def pull(ns):
     q = ns.V("/dev/pipe/consumer/test/in").value
-    while True:
-        while len(q) > 0:
+    for i in range(10):
+        if len(q) > 0:
             data = q.get()
             print(data)
-        time.sleep(0)
+        time.sleep(1)
 
 ns, f, F = NS()
 F("/bin/initAppRegister", appconfig, level=1, action='start')

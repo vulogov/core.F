@@ -25,7 +25,7 @@ def push(ns):
 
 ns, f, F = NS()
 F("/bin/initAppRegister", appconfig, level=1, action='start')
-F("/bin/pipeEmitter", "test", "tcp://*:60000", cb)
+F("/bin/pipeEmitter", "test", "tcp://*:61000", cb)
 F("/bin/spawn", "pusher", push)
 F("/bin/main")
 F("/usr/local/bin/daemon")

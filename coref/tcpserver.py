@@ -26,7 +26,10 @@ def nsTcpCreate(ns, listen, port, callback):
                     break
                 if len(_r) == 0:
                     break
-                part = sock.recv(BUFF_SIZE)
+                try:
+                    part = sock.recv(BUFF_SIZE)
+                except:
+                    break
                 if len(part) == 0:
                     break
                 data += part
