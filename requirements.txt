@@ -16,7 +16,7 @@ clint==0.5.1
 colorama==0.4.3
 commonmark==0.9.1
 consolemd==0.5.1
-cryptography==2.9.2
+cryptography==3.2
 Cython==0.29.19
 decorator==4.4.2
 dill==0.3.2
